@@ -1,0 +1,12 @@
+[Unit]
+Description=Bind Mount Clean Root Filesystem
+ConditionKernelCommandLine=ic.ovl
+DefaultDependencies=no
+Requires=sysroot-prepare.service
+After=sysroot-prepare.service
+Before=initrd-root-fs.target
+
+[Mount]
+What=/
+Where=/sysroot/rootfs
+Options=bind
