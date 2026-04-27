@@ -1,9 +1,0 @@
-#!/bin/sh
-set -eu
-
-mkdir -p "${BUILDROOT}/sysroot"
-
-# Empty machine-id gives the live boot a transient ID (systemd bind-mounts a
-# tmpfs file over it). The on-disk installer must write "uninitialized" to
-# /etc/machine-id so the installed system gets a persistent ID on first boot.
-: > "${BUILDROOT}/etc/machine-id"

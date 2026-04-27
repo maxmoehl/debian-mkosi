@@ -1,0 +1,13 @@
+[Match]
+Name=en*
+
+[Network]
+LinkLocalAddressing=no
+IPv6AcceptRA=no
+
+[Address]
+Address=fe80::2/64
+
+[Route]
+Gateway=fe80::1
+GatewayOnLink=yes

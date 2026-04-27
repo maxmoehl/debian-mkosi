@@ -1,0 +1,10 @@
+[Unit]
+Description=Configure network addresses from SMBIOS
+DefaultDependencies=no
+Before=systemd-networkd.service
+After=local-fs.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/bin/smbios-network-config.sh

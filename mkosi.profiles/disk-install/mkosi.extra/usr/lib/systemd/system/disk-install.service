@@ -1,0 +1,15 @@
+[Unit]
+Description=On-Disk Install
+
+DefaultDependencies=no
+After=systemd-udevd.service
+
+OnFailure=emergency.target
+OnFailureJobMode=isolate
+
+[Service]
+Type=oneshot
+TimeoutStartSec=600
+RemainAfterExit=yes
+ExecStartPre=/bin/udevadm settle
+ExecStart=/usr/local/bin/disk-install.sh
