@@ -1,21 +1,5 @@
 [Match]
 Name=en*
 
-[Link]
-MTUBytes=9100
-
 [Network]
-LLDP=true
-EmitLLDP=true
-LinkLocalAddressing=ipv6
-IgnoreCarrierLoss=true
 ConfigureWithoutCarrier=true
-DHCP=ipv6
-IPv6AcceptRA=true
-
-[IPv6AcceptRA]
-# TODO: remove once FRR is up
-UseGateway=true
-UseRoutePrefix=false
-UseAutonomousPrefix=false
-UseOnLinkPrefix=false

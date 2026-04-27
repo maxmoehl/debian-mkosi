@@ -1,7 +1,0 @@
-[Match]
-Name=en*
-
-[Network]
-LinkLocalAddressing=ipv6
-IgnoreCarrierLoss=true
-ConfigureWithoutCarrier=true

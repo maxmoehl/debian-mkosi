@@ -8,3 +8,6 @@ After=local-fs.target
 Type=oneshot
 RemainAfterExit=yes
 ExecStart=/usr/local/bin/smbios-network-config.sh
+
+[Install]
+WantedBy=multi-user.target

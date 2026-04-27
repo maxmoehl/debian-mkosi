@@ -44,9 +44,9 @@ EOF
 cat > "${REPART_DIR}/10-root.conf" <<EOF
 [Partition]
 Type=root
+Format=ext4
 SizeMinBytes=20G
 CopyFiles=/
-CopyFiles=/boot
 Label=ROOT
 MountPoint=/
 EOF

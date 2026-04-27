@@ -13,3 +13,6 @@ TimeoutStartSec=600
 RemainAfterExit=yes
 ExecStartPre=/bin/udevadm settle
 ExecStart=/usr/local/bin/disk-install.sh
+
+[Install]
+WantedBy=initrd.target
