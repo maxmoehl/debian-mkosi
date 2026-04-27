@@ -3,9 +3,9 @@ Description=On-Disk Install
 
 DefaultDependencies=no
 After=systemd-udevd.service
+Before=initrd.target
 
 OnFailure=emergency.target
-OnFailureJobMode=isolate
 
 [Service]
 Type=oneshot

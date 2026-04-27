@@ -47,6 +47,7 @@ Type=root
 Format=ext4
 SizeMinBytes=20G
 CopyFiles=/
+CopyFiles=/boot
 Label=ROOT
 MountPoint=/
 EOF
@@ -87,12 +88,13 @@ mount -t sysfs sysfs                   "/mnt/sys"
 mount --bind /dev                      "/mnt/dev"
 mount --bind /sys/firmware/efi/efivars "/mnt/sys/firmware/efi/efivars"
 
+kver=$(ls /mnt/usr/lib/modules/ | head -1)
+
 chroot "/mnt" bootctl install
-chroot "/mnt" update-initramfs -c -k "$(uname -r)"
+chroot "/mnt" update-initramfs -c -k "${kver}"
 
 # --- Execute the kernel from disk ---
-kexec \
-    --load="/mnt/boot/vmlinuz-$(uname -r)" \
-    --initrd="/mnt/boot/initrd.img-$(uname -r)" \
+kexec -l "/mnt/boot/vmlinuz-${kver}" \
+    --initrd="/mnt/boot/initrd.img-${kver}" \
     --append="root=LABEL=ROOT console=tty0"
 kexec -e
