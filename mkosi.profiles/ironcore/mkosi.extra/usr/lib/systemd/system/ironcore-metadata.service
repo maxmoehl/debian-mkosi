@@ -1,0 +1,13 @@
+[Unit]
+Description=Fetch IronCore metadata
+After=network-online.target
+Wants=network-online.target
+Before=ironcore-bootstrap.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/ironcore/ironcore-metadata.sh
+
+[Install]
+WantedBy=ironcore-bootstrap.target

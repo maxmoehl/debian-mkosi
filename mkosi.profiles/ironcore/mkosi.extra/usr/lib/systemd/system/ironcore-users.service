@@ -1,0 +1,13 @@
+[Unit]
+Description=Provision users from IronCore metadata
+After=ironcore-metadata.service
+Requires=ironcore-metadata.service
+Before=ironcore-bootstrap.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/ironcore/ironcore-users.sh
+
+[Install]
+WantedBy=ironcore-bootstrap.target

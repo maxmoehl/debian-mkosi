@@ -1,0 +1,13 @@
+[Unit]
+Description=Provision files from IronCore metadata
+After=ironcore-metadata.service
+Requires=ironcore-metadata.service
+Before=ironcore-bootstrap.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/ironcore/ironcore-files.sh
+
+[Install]
+WantedBy=ironcore-bootstrap.target
