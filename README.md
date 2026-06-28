@@ -28,6 +28,7 @@ Output is placed in `mkosi.output/`. The UKI is the `.efi` file.
 | `users`        | Creates operator accounts (max, damyan) with SSH keys   |
 | `frr`          | Adds FRRouting                                          |
 | `jool`         | Adds Jool NAT64 with SMBIOS-driven network config       |
+| `rescue-stick` | Builds a disk image for rescue USB sticks.              |
 
 ## Boot Modes
 
@@ -40,6 +41,9 @@ on a writable tmpfs.
 the target disk, copies the clean rootfs, installs the bootloader, and kexecs
 into the installed system.
 
+Note that the `rescue-stick` profile overrides the output to be a disk image
+which can be written to a USB stick.
+
 ## Publishing
 
 ```
@@ -49,3 +53,29 @@ ironcore-image push --push-sub-manifests "${IMAGE_TAG}"
 ```
 
 Requires `ironcore-image` and registry credentials.
+
+## Testing
+
+### Rescue Stick
+
+To test the image with qemu, you need to add `console=ttyS0` to the kernel
+cmdline to be able to attach to the VM via the qemu serial console:
+
+```
+mkosi --profile metal,rescue-stick --kernel-command-line console=ttyS0 build
+```
+
+To run in qemu:
+
+```
+qemu-system-x86_64 \
+    -m 2G \
+    -bios /usr/share/ovmf/OVMF.fd \
+    -drive file=mkosi.output/image.raw,format=raw,if=virtio \
+    -net nic \
+    -net user \
+    -nographic \
+    -enable-kvm
+```
+
+Drop the `-enable-kvm` to be able to run without any privileges.

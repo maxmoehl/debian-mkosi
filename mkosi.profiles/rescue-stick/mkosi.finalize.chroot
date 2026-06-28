@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -ex
+
+useradd \
+    --home /home/max \
+    --no-create-home \
+    --user-group \
+    --password '' \
+    --shell /usr/bin/bash \
+    max
+
+groupadd wheel
+usermod \
+    --append \
+    --groups wheel \
+    max

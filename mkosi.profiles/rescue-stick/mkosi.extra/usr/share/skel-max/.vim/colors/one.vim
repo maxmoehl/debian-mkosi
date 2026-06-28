@@ -1,0 +1,1 @@
+../../dotfiles/vim/dot-vim/colors/one.vim
