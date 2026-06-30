@@ -1,4 +1,6 @@
-# jool
+## jool
+
+**UNTESTED**
 
 Adds [Jool](https://nicmx.github.io/Jool/) for stateful NAT64 translation
 (`pool6 64:ff9b::/96`). Includes DKMS kernel module and userspace tools.

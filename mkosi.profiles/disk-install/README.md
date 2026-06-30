@@ -1,4 +1,8 @@
-# disk-install
+## disk-install
+
+Automatically install the operating system to disk from the UKI. The profile is
+intended to be included for `metal` platforms, not sure what happens when
+combined with `virt`.
 
 Enables `MakeInitrd=yes` so the rootfs is packed as a cpio initrd. On boot,
 systemd enters initrd mode and the `disk-install.service` runs before the system
