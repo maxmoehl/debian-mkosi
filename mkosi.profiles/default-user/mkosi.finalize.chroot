@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -ex
+
+useradd \
+    --home /home/debian \
+    --no-create-home \
+    --user-group \
+    --password '$y$j9T$x6jjLq4RnvsQY1DbIQV1l0$0XDK.xNemn1HyYptGZmRygRY45WdsgF3O9yfdW1uYq4' \
+    --shell /usr/bin/bash \
+    debian
+
+groupadd wheel
+usermod \
+    --append \
+    --groups wheel \
+    debian
