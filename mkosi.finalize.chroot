@@ -6,3 +6,6 @@ set -ex
 # tmpfs file over it). Any on-disk installer must write "uninitialized" to
 # /etc/machine-id so the installed system gets a persistent ID on first boot.
 : > /etc/machine-id
+
+# Add group for password-less sudo.
+groupadd wheel

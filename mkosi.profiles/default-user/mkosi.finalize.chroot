@@ -10,7 +10,6 @@ useradd \
     --shell /usr/bin/bash \
     debian
 
-groupadd wheel
 usermod \
     --append \
     --groups wheel \

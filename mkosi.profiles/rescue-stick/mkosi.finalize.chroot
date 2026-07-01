@@ -10,7 +10,6 @@ useradd \
     --shell /usr/bin/bash \
     max
 
-groupadd wheel
 usermod \
     --append \
     --groups wheel \
