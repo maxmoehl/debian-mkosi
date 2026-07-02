@@ -8,7 +8,10 @@ set -euo pipefail
 target=""
 for disk in /dev/disk/by-path/pci-*; do
     [ -e "${disk}" ] || continue
-    target=$(readlink -f "${disk}")
+    resolved=$(readlink -f "${disk}")
+    devtype=$(lsblk -dn -o TYPE "${resolved}")
+    [ "${devtype}" = "disk" ] || continue
+    target="${resolved}"
     break
 done
 
