@@ -1,0 +1,119 @@
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+use Getopt::Long;
+use JSON::PP;
+use POSIX qw(strftime);
+
+my $repo = "ghcr.io/maxmoehl";
+
+my %distro_config = (
+    "debian" => { release => "trixie" },
+    "ubuntu" => { release => "noble" },
+);
+
+my %platform_config = (
+    "metal" => { layer => "uki",    ext => "efi" },
+    "virt"  => { layer => "rootfs", ext => "raw" },
+);
+
+my %mkosi_arch = (
+    "amd64" => "x86-64",
+    "arm64" => "arm64",
+);
+
+sub usage {
+    die("usage: bin/build [ -a ARCHITECTURE ] [ -d DISTRO ] FLAVOR\n");
+}
+
+my $architecture = "";
+my $distro = "";
+GetOptions(
+    "architecture|a=s" => \$architecture,
+    "distro|d=s"       => \$distro,
+) or usage();
+
+if (scalar(@ARGV) != 1) {
+    usage();
+}
+
+my $json = JSON::PP->new->utf8();
+open(my $fh, '<', 'flavors.json') or die("bin/build: open flavors.json: $!\n");
+my $flavors_json = do { local $/; <$fh> };
+close($fh);
+my $flavors = $json->decode($flavors_json);
+
+my $flavor_name = $ARGV[0];
+if (!exists($flavors->{$flavor_name})) {
+    die("bin/build: unknown flavor '$flavor_name'\n");
+}
+
+my $flavor = $flavors->{$flavor_name};
+
+my @distros = @{$flavor->{distros}};
+if ($distro ne "") {
+    if (!grep { $_ eq $distro } @distros) {
+        die("bin/build: distro '$distro' not supported for flavor '$flavor_name'\n");
+    }
+    @distros = ($distro);
+}
+
+my @architectures = @{$flavor->{architectures}};
+if ($architecture ne "") {
+    if (!grep { $_ eq $architecture } @architectures) {
+        die("bin/build: architecture '$architecture' not supported for flavor '$flavor_name'\n");
+    }
+    @architectures = ($architecture);
+}
+
+my $plat = $flavor->{platform};
+
+my $pc = $platform_config{$plat};
+if (!defined($pc)) {
+    die("bin/build: unknown platform '$plat'\n");
+}
+
+my $date = strftime("%Y%m%d", localtime());
+
+for my $dist (@distros) {
+    my $dc = $distro_config{$dist};
+    if (!defined($dc)) {
+        die("bin/build: unknown distro '$dist'\n");
+    }
+
+    my $release = $dc->{release};
+    my @profiles = ($dist, $plat, @{$flavor->{profiles}});
+    my $profiles_str = join(",", @profiles);
+    my $filename = join("_", @profiles);
+    my $tag = "${release}-${flavor_name}";
+
+    system("rm", "-f", glob("mkosi.output/*"));
+
+    for my $arch (@architectures) {
+        my $mkosi_a = $mkosi_arch{$arch};
+        if (!defined($mkosi_a)) {
+            die("bin/build: unknown architecture mapping for '$arch'\n");
+        }
+        system("mkosi", "--architecture", $mkosi_a, "--profile", $profiles_str, "build") == 0
+            or die("bin/build: mkosi build failed: $!\n");
+    }
+
+    my $layer = $pc->{layer};
+    my $ext = $pc->{ext};
+
+    my @configs;
+    for my $arch (@architectures) {
+        push(@configs, "--config", "arch=${arch},${layer}=mkosi.output/${filename}_${mkosi_arch{$arch}}.${ext}");
+    }
+
+    system("ironcore-image", "build", "--tag", "${repo}/${dist}:${tag}-${date}", @configs) == 0
+        or die("bin/build: ironcore-image build failed: $!\n");
+
+    system("ironcore-image", "push", "--push-sub-manifests", "${repo}/${dist}:${tag}-${date}") == 0
+        or die("bin/build: ironcore-image push failed: $!\n");
+
+    system("oras", "tag", "${repo}/${dist}:${tag}-${date}", $tag) == 0
+        or die("bin/build: oras tag failed: $!\n");
+}
