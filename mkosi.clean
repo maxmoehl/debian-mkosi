@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+output=$(jq -c '.' "$MKOSI_CONFIG" | "$SRCDIR"/mkosi.configure | jq -r '.Output')
+
+rm -f "$OUTPUTDIR"/"$output"*
