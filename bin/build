@@ -26,7 +26,7 @@ my %mkosi_arch = (
 );
 
 sub usage {
-    die("usage: bin/build [ -a ARCHITECTURE ] [ -d DISTRO ] FLAVOR\n");
+    die("usage: bin/build [ -a ARCHITECTURE ] [ -d DISTRO ] FLAVOR [ -- MKOSI_ARGS... ]\n");
 }
 
 my $architecture = "";
@@ -38,7 +38,7 @@ GetOptions(
     "push|p"          => \$push,
 ) or usage();
 
-if (scalar(@ARGV) != 1) {
+if (scalar(@ARGV) < 1) {
     usage();
 }
 
@@ -48,7 +48,9 @@ my $flavors_json = do { local $/; <$fh> };
 close($fh);
 my $flavors = $json->decode($flavors_json);
 
-my $flavor_name = $ARGV[0];
+my $flavor_name = shift(@ARGV);
+my @mkosi_extra = @ARGV;
+
 if (!exists($flavors->{$flavor_name})) {
     die("bin/build: unknown flavor '$flavor_name'\n");
 }
@@ -99,7 +101,7 @@ for my $dist (@distros) {
         }
         system("mkosi", "--architecture", $mkosi_a, "--profile", $profiles_str, "clean") == 0
             or die("bin/build: mkosi --architecture $mkosi_a --profile $profiles_str clean failed\n");
-        system("mkosi", "--architecture", $mkosi_a, "--profile", $profiles_str, "build") == 0
+        system("mkosi", "--architecture", $mkosi_a, "--profile", $profiles_str, @mkosi_extra, "build") == 0
             or die("bin/build: mkosi --architecture $mkosi_a --profile $profiles_str build failed\n");
     }
 
