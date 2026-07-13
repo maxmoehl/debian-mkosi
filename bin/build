@@ -105,6 +105,10 @@ for my $dist (@distros) {
             or die("bin/build: mkosi --architecture $mkosi_a --profile $profiles_str build failed\n");
     }
 
+    if (!$push) {
+        next;
+    }
+
     my $layer = $pc->{layer};
     my $ext = $pc->{ext};
 
@@ -115,10 +119,6 @@ for my $dist (@distros) {
 
     system("ironcore-image", "build", "--tag", "${repo}/${dist}:${tag}-${date}", @configs) == 0
         or die("bin/build: ironcore-image build failed\n");
-
-    if (!$push) {
-        next;
-    }
 
     system("ironcore-image", "push", "--push-sub-manifests", "${repo}/${dist}:${tag}-${date}") == 0
         or die("bin/build: ironcore-image push failed\n");
