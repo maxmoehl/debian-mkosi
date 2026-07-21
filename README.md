@@ -31,6 +31,7 @@ is the raw disk.
 | `jool`         | Adds Jool NAT64 with SMBIOS-driven network config       |
 | `rescue-stick` | Builds a disk image for rescue USB sticks.              |
 | `factorio`     | Installs the Factorio server.                           |
+| `teamspeak`    | Installs the TeamSpeak3 server.                           |
 
 See the readme of each profile for more details.
 
