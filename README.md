@@ -21,17 +21,17 @@ is the raw disk.
 
 ## Profiles
 
-| Profile        | Purpose                                                 |
-|----------------|---------------------------------------------------------|
-| `metal`        | Full hardware kernel (`linux-image-amd64`), VGA console |
-| `virt`         | Cloud kernel (`linux-image-cloud-amd64`), serial console|
-| `disk-install` | Boots as initrd, installs to disk, kexecs               |
-| `users`        | Creates operator accounts (max, damyan) with SSH keys   |
-| `frr`          | Adds FRRouting                                          |
-| `jool`         | Adds Jool NAT64 with SMBIOS-driven network config       |
-| `rescue-stick` | Builds a disk image for rescue USB sticks.              |
-| `factorio`     | Installs the Factorio server.                           |
-| `teamspeak`    | Installs the TeamSpeak3 server.                           |
+| Profile        | Purpose                                                    |
+|----------------|------------------------------------------------------------|
+| `metal`        | Full hardware kernel (`linux-image-amd64`), VGA console    |
+| `virt`         | Cloud kernel (`linux-image-cloud-amd64`), serial console   |
+| `disk-install` | Boots as initrd, installs to disk, kexecs                  |
+| `users`        | Creates operator accounts (max, damyan) with SSH keys      |
+| `frr`          | Adds FRRouting                                             |
+| `jool`         | Adds Jool NAT64 with SMBIOS-driven network config          |
+| `rescue-stick` | Builds a disk image for rescue USB sticks.                 |
+| `cloud-init`   | Provisions via cloud-init user-data fetched from metaldata |
+| `factorio`     | Installs the Factorio server.                              |
+| `teamspeak`    | Installs the TeamSpeak3 server.                            |
 
 See the readme of each profile for more details.
-

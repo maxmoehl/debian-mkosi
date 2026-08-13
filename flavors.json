@@ -3,7 +3,7 @@
         "distros": ["debian", "ubuntu"],
         "platform": "metal",
         "architectures": ["amd64", "arm64"],
-        "profiles": ["disk-install", "ironcore"]
+        "profiles": ["disk-install", "cloud-init"]
     },
     "virt": {
         "distros": ["debian", "ubuntu"],
