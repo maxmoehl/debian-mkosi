@@ -1,0 +1,13 @@
+#!/bin/sh
+set -ex
+
+# Ubuntu (unlike Debian/GardenLinux) does not enable ssh in its base config.
+# Enable ssh.socket so the installed system accepts SSH.
+systemctl enable ssh.socket
+
+# The image ships with no host keys (RemoveFiles in the root mkosi.conf);
+# openssh-server generates them via its postinst at build time, which mkosi
+# then deletes. The ssh.service unit has no ssh-keygen -A in ExecStartPre, so
+# nothing regenerates them at runtime. Enable a one-shot first-boot service
+# that runs ssh-keygen -A before ssh starts (see the unit we ship alongside).
+systemctl enable ssh-keygen.service

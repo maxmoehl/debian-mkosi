@@ -19,6 +19,15 @@ mkosi -p metal,disk-install build
 Output is placed in `mkosi.output/`, the UKI is the `.efi` file, the `.raw` file
 is the raw disk.
 
+### Ignition workaround 
+
+To build the Ubuntu Image compatible with the old ignition system
+
+```
+mkosi -p ubuntu,metal,disk-install,ironcore,ignition build
+```
+
+
 ## Profiles
 
 | Profile        | Purpose                                                 |
@@ -31,7 +40,8 @@ is the raw disk.
 | `jool`         | Adds Jool NAT64 with SMBIOS-driven network config       |
 | `rescue-stick` | Builds a disk image for rescue USB sticks.              |
 | `factorio`     | Installs the Factorio server.                           |
-| `teamspeak`    | Installs the TeamSpeak3 server.                           |
+| `teamspeak`    | Installs the TeamSpeak3 server.                         |
+| `ignition`     | Workaround to get ignition working with ubuntu.         |
 
 See the readme of each profile for more details.
 

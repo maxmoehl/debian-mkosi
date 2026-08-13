@@ -1,0 +1,16 @@
+[Unit]
+Description=Remove ignition first-boot integration after provisioning
+# Only clean up once provisioning has fully succeeded.
+After=ignition-users.service ignition-files.service
+Requires=ignition-users.service ignition-files.service
+# Run within the first-boot bootstrap target (same gating: first boot only,
+# not in the initrd).
+Before=ignition-bootstrap.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/ignition/ignition-cleanup.sh
+
+[Install]
+WantedBy=ignition-bootstrap.target

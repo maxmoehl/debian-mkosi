@@ -1,0 +1,7 @@
+[Unit]
+Description=Ignition Bootstrap
+ConditionFirstBoot=yes
+ConditionPathExists=!/etc/initrd-release
+
+[Install]
+WantedBy=multi-user.target
