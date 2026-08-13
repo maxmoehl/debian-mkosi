@@ -4,6 +4,6 @@ SOURCE_DATE_EPOCH=$(git log -1 --format=%ct)
 
 exec jq --arg sde "$SOURCE_DATE_EPOCH" '
     .SourceDateEpoch = ($sde | tonumber)
-    | .ImageId = (.Profiles | join("_")) + "_" + .Architecture
+    | .ImageId //= (.Profiles | join("_")) + "_" + .Architecture
     | .Output = .ImageId
 '
