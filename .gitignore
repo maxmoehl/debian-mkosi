@@ -1,1 +1,4 @@
 *.swp
+# local dev credentials for `mkosi ssh`
+/mkosi.key
+/mkosi.crt
