@@ -1,0 +1,13 @@
+[Unit]
+Description=Fetch ignition config from boot-operator
+After=network-online.target
+Wants=network-online.target
+Before=ignition-bootstrap.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/ignition/ignition-fetch.sh
+
+[Install]
+WantedBy=ignition-bootstrap.target

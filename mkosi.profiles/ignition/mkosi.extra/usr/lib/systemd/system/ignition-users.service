@@ -1,0 +1,13 @@
+[Unit]
+Description=Provision users from ignition config
+After=ignition-fetch.service
+Requires=ignition-fetch.service
+Before=ignition-bootstrap.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/lib/ignition/ignition-users.sh
+
+[Install]
+WantedBy=ignition-bootstrap.target
