@@ -26,7 +26,7 @@ my %mkosi_arch = (
 );
 
 sub usage {
-    die("usage: bin/build [ -a ARCHITECTURE ] [ -d DISTRO ] FLAVOR [ -- MKOSI_ARGS... ]\n");
+    die("usage: bin/build [ -a ARCHITECTURE ] [ -d DISTRO ] [ -p ] FLAVOR [ -- MKOSI_ARGS... ]\n");
 }
 
 my $architecture = "";
