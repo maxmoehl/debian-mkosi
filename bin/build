@@ -10,11 +10,6 @@ use POSIX qw(strftime);
 
 my $repo = "ghcr.io/maxmoehl";
 
-my %distro_config = (
-    "debian" => { release => "trixie" },
-    "ubuntu" => { release => "resolute" },
-);
-
 my %platform_config = (
     "metal" => { layer => "uki",    ext => "efi" },
     "virt"  => { layer => "rootfs", ext => "raw" },
@@ -83,16 +78,9 @@ if (!defined($pc)) {
 my $date = strftime("%Y%m%d", localtime());
 
 for my $dist (@distros) {
-    my $dc = $distro_config{$dist};
-    if (!defined($dc)) {
-        die("bin/build: unknown distro '$dist'\n");
-    }
-
-    my $release = $dc->{release};
     my @profiles = ($dist, $plat, @{$flavor->{profiles}});
     my $profiles_str = join(",", @profiles);
     my $filename = join("_", @profiles);
-    my $tag = "${release}-${flavor_name}";
 
     for my $arch (@architectures) {
         my $mkosi_a = $mkosi_arch{$arch};
@@ -108,6 +96,15 @@ for my $dist (@distros) {
     if (!$push) {
         next;
     }
+
+    # Determine the release from the manifest of the built image, so that the
+    # tag always matches the mkosi profile configuration.
+    my $manifest = "mkosi.output/${filename}_${mkosi_arch{$architectures[0]}}.manifest";
+    open(my $mfh, '<', $manifest) or die("bin/build: open $manifest: $!\n");
+    my $release = $json->decode(do { local $/; <$mfh> })->{config}{release}
+        or die("bin/build: no release in $manifest\n");
+    close($mfh);
+    my $tag = "${release}-${flavor_name}";
 
     my $layer = $pc->{layer};
     my $ext = $pc->{ext};
