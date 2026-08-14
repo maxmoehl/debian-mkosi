@@ -12,7 +12,7 @@ my $repo = "ghcr.io/maxmoehl";
 
 my %distro_config = (
     "debian" => { release => "trixie" },
-    "ubuntu" => { release => "noble" },
+    "ubuntu" => { release => "resolute" },
 );
 
 my %platform_config = (
